@@ -3,7 +3,7 @@ import yt_dlp
 import os
 import uuid
 from urllib.parse import urlparse
-
+print("YT-DLP VERSION:", yt_dlp.version.__version__)
 app = Flask(__name__)
 
 DOWNLOAD_FOLDER = os.path.join(
