@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DestiGrab — Save what you love.</title>
+
+    <meta
+        name="description"
+        content="DestiGrab — a modern multi-platform video downloader by Destiny Dev."
+    >
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="ambient">
+    <div class="orb orb-one"></div>
+    <div class="orb orb-two"></div>
+    <div class="orb orb-three"></div>
+</div>
+
+<div class="grain"></div>
+
+<header class="navbar">
+
+    <a href="#home" class="brand">
+
+        <div class="brand-icon">
+            <span>DG</span>
+        </div>
+
+        <div class="brand-name">
+            <strong>DestiGrab</strong>
+            <small>by Destiny Dev</small>
+        </div>
+
+    </a>
+
+    <nav class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#features">Features</a>
+        <a href="#developer">Developer</a>
+        <a href="#about">About</a>
+    </nav>
+
+</header>
+
+<main id="home">
+
+<section class="hero">
+
+    <div class="hero-pill">
+        <span class="live-dot"></span>
+        Universal video downloader
+    </div>
+
+    <h1>
+        Save what
+        <span>you love.</span>
+    </h1>
+
+    <p class="hero-text">
+        One link. One clean experience.
+        Download videos from supported platforms
+        with a simple, modern interface.
+    </p>
+
+    <div class="download-shell">
+
+        <div class="glass-reflection"></div>
+
+        <div class="url-row">
+
+            <div class="link-symbol">↗</div>
+
+            <input
+                id="videoUrl"
+                type="url"
+                placeholder="Paste your video link..."
+                autocomplete="off"
+                spellcheck="false"
+            >
+
+            <button
+                id="clearBtn"
+                class="clear-btn"
+                type="button"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <button
+            id="previewBtn"
+            class="grab-button"
+            type="button"
+        >
+            <span class="btn-text">Grab</span>
+            <span class="btn-arrow">→</span>
+            <span class="btn-loader"></span>
+        </button>
+
+        <div
+            id="platformStatus"
+            class="platform-status"
+        >
+            <span class="status-dot"></span>
+            Waiting for a link...
+        </div>
+
+    </div>
+
+    <div class="platform-area">
+
+        <span class="platform-label">
+            Supported platforms
+        </span>
+
+        <div class="platform-list">
+
+            <div class="platform-pill">
+                <span class="pill-icon youtube">▶</span>
+                YouTube
+            </div>
+
+            <div class="platform-pill">
+                <span class="pill-icon tiktok">♪</span>
+                TikTok
+            </div>
+
+            <div class="platform-pill">
+                <span class="pill-icon instagram">◎</span>
+                Instagram
+            </div>
+
+            <div class="platform-pill">
+                <span class="pill-icon facebook">f</span>
+                Facebook
+            </div>
+
+            <div class="platform-pill">
+                <span class="pill-icon twitter">𝕏</span>
+                X
+            </div>
+
+            <div class="platform-pill more">
+                + More
+            </div>
+
+        </div>
+
+    </div>
+
+    <section
+        id="previewSection"
+        class="preview-section hidden"
+    >
+
+        <div class="preview-card">
+
+            <div class="preview-media">
+
+
+               <div class="thumbnail-fallback" id="thumbnailFallback">
+    <div class="fallback-icon">▶</div>
+    <div class="fallback-title">Video Preview</div>
+    <div class="fallback-text">Thumbnail unavailable</div>
+</div>
+
+<img
+    id="videoThumbnail"
+    src=""
+    alt="Video thumbnail"
+>
+
+                <div class="media-shade"></div>
+
+                <div class="play-button">
+                    ▶
+                </div>
+
+                <div
+                    id="durationBadge"
+                    class="duration"
+                >
+                    00:00
+                </div>
+
+            </div>
+
+            <div class="preview-info">
+
+                <div class="detected">
+
+                    <span class="mini-status"></span>
+
+                    <span id="detectedPlatform">
+                        Platform
+                    </span>
+
+                </div>
+
+                <h2 id="videoTitle">
+                    Video title
+                </h2>
+
+                <div class="download-row">
+
+                    <div class="quality-control">
+
+                        <span>Quality</span>
+
+                        <select id="qualitySelect">
+
+                            <option value="360">360p</option>
+                            <option value="480">480p</option>
+                            <option value="720" selected>720p</option>
+                            <option value="1080">1080p</option>
+                            <option value="1440">1440p</option>
+                            <option value="2160">2160p</option>
+
+                        </select>
+
+                    </div>
+
+                    <button
+                        id="downloadBtn"
+                        class="download-button"
+                        type="button"
+                    >
+                        <span>Download</span>
+                        <span class="download-arrow">↓</span>
+                    </button>
+
+                </div>
+
+                <div
+                    id="downloadStatus"
+                    class="download-status"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</section>
+
+<section id="features" class="features">
+
+    <div class="section-intro">
+
+        <span>DESTIGRAB</span>
+
+        <h2>Simple by design.</h2>
+
+        <p>
+            Everything you need.
+            Nothing you don't.
+        </p>
+
+    </div>
+
+    <div class="feature-grid">
+
+        <article class="feature-card">
+
+            <div class="feature-icon">✦</div>
+
+            <h3>One link</h3>
+
+            <p>
+                Paste a supported video URL
+                and let DestiGrab handle the detection.
+            </p>
+
+        </article>
+
+        <article class="feature-card">
+
+            <div class="feature-icon">⚡</div>
+
+            <h3>Fast experience</h3>
+
+            <p>
+                A lightweight interface designed
+                to keep downloading simple.
+            </p>
+
+        </article>
+
+        <article class="feature-card">
+
+            <div class="feature-icon">◌</div>
+
+            <h3>Quality control</h3>
+
+            <p>
+                Choose from the quality options
+                available for the video.
+            </p>
+
+        </article>
+
+    </div>
+
+</section>
+<!-- CONTACT DEVELOPER -->
+<section
+    id="developer"
+    class="developer-contact"
+>
+
+    <div class="developer-card">
+
+        <div class="developer-glow"></div>
+
+        <div class="developer-tag">
+            WORK WITH DESTINY DEV
+        </div>
+
+        <h2>
+            Got an idea?
+            <span>Let's build it.</span>
+        </h2>
+
+        <p>
+            Need a website, Telegram bot,
+            AI project, or custom software?
+            Let's turn the idea into something real.
+        </p>
+
+        <div class="developer-profile">
+
+            <div class="developer-avatar">
+                DG
+            </div>
+
+            <div class="developer-info">
+
+                <strong>
+                    Destiny Dev
+                </strong>
+
+                <span>
+                    Developer & Creator
+                </span>
+
+            </div>
+
+        </div>
+
+        <a
+            class="contact-developer-btn"
+            href="https://wa.me/2347073130490"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            <span>
+                Contact Developer
+            </span>
+
+            <span>
+                ↗
+            </span>
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- ABOUT -->
+<section
+    id="about"
+    class="about"
+>
+
+    <div class="about-card">
+
+        <div class="about-light"></div>
+
+        <div class="about-tag">
+            ABOUT DESTIGRAB
+        </div>
+
+        <h2>
+            More than a
+            <span>project.</span>
+        </h2>
+
+        <div class="about-copy">
+
+            <p>
+                DestiGrab is more than just a downloader.
+            </p>
+
+            <p>
+                It was inspired by my mom — the woman
+                who continues to remind me that no dream
+                is too big to start with what you have.
+            </p>
+
+            <p>
+                I built DestiGrab as part of my journey
+                as a young developer, learning, creating,
+                and turning ideas into something real.
+            </p>
+
+            <p>
+                Every line of code, every late night,
+                and every new idea is a step forward.
+            </p>
+
+        </div>
+
+        <div class="signature">
+
+            <strong>
+                Inspired by my mom. Built by me.
+            </strong>
+
+            <span>
+                — Destiny Godwin · Destiny Dev
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- FOOTER -->
+<footer>
+
+    <div class="footer-brand">
+
+        <div class="footer-icon">
+            DG
+        </div>
+
+        <strong>
+            DestiGrab
+        </strong>
+
+    </div>
+
+    <p>
+        Built by Destiny Godwin — Destiny Dev.
+    </p>
+
+    <span>
+        © 2026 DestiGrab
+    </span>
+
+</footer>
+
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
