@@ -14,9 +14,9 @@ DOWNLOAD_FOLDER = os.path.join(
 os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
 
 
-# -------------------------
-# Universal URL validation
-# -------------------------
+# =========================================================
+# URL VALIDATION
+# =========================================================
 
 def is_valid_url(url):
     try:
@@ -31,23 +31,45 @@ def is_valid_url(url):
         return False
 
 
-# -------------------------
-# Universal platform detection
-# -------------------------
+# =========================================================
+# YOUTUBE / YT-DLP OPTIONS
+# =========================================================
+
+def get_ydl_options():
+    return {
+        "quiet": True,
+        "no_warnings": True,
+        "noplaylist": True,
+
+        "extractor_args": {
+            "youtube": {
+                "player_client": [
+                    "tv",
+                    "android_vr",
+                    "web_embedded"
+                ]
+            }
+        }
+    }
+
+
+# =========================================================
+# PLATFORM DETECTION
+# =========================================================
 
 def detect_platform(url):
+
     if not is_valid_url(url):
         return None
 
     try:
-        options = {
-            "quiet": True,
-            "no_warnings": True,
-            "noplaylist": True,
-            "skip_download": True
-        }
+
+        options = get_ydl_options()
+
+        options["skip_download"] = True
 
         with yt_dlp.YoutubeDL(options) as ydl:
+
             info = ydl.extract_info(
                 url,
                 download=False
@@ -62,25 +84,29 @@ def detect_platform(url):
         return extractor
 
     except Exception as e:
-        print("DETECT ERROR:", repr(e))
+
+        print(
+            "DETECT ERROR:",
+            repr(e)
+        )
+
         return None
 
 
-# -------------------------
-# Get video information
-# -------------------------
+# =========================================================
+# GET VIDEO INFORMATION
+# =========================================================
 
 def get_video_info(url):
 
     if not is_valid_url(url):
-        raise ValueError("Invalid URL.")
+        raise ValueError(
+            "Invalid URL."
+        )
 
-    options = {
-        "quiet": True,
-        "no_warnings": True,
-        "noplaylist": True,
-        "skip_download": True
-    }
+    options = get_ydl_options()
+
+    options["skip_download"] = True
 
     with yt_dlp.YoutubeDL(options) as ydl:
 
@@ -89,16 +115,26 @@ def get_video_info(url):
             download=False
         )
 
-    thumbnail = info.get("thumbnail")
+    thumbnail = info.get(
+        "thumbnail"
+    )
 
     available_heights = set()
 
-    for fmt in info.get("formats", []):
+    for fmt in info.get(
+        "formats",
+        []
+    ):
 
-        height = fmt.get("height")
+        height = fmt.get(
+            "height"
+        )
 
         if height and height >= 144:
-            available_heights.add(height)
+
+            available_heights.add(
+                height
+            )
 
     available_heights = sorted(
         available_heights
@@ -121,7 +157,10 @@ def get_video_info(url):
             height >= quality
             for height in available_heights
         ):
-            qualities.append(quality)
+
+            qualities.append(
+                quality
+            )
 
     if not qualities and available_heights:
 
@@ -137,30 +176,26 @@ def get_video_info(url):
 
     return {
 
-        "title":
-            info.get(
-                "title",
-                "Untitled video"
-            ),
+        "title": info.get(
+            "title",
+            "Untitled video"
+        ),
 
-        "thumbnail":
-            thumbnail,
+        "thumbnail": thumbnail,
 
-        "duration":
-            info.get("duration"),
+        "duration": info.get(
+            "duration"
+        ),
 
-        "platform":
-            platform,
+        "platform": platform,
 
-        "qualities":
-            qualities
-
+        "qualities": qualities
     }
 
 
-# -------------------------
-# Home
-# -------------------------
+# =========================================================
+# HOME
+# =========================================================
 
 @app.route("/")
 def home():
@@ -170,9 +205,9 @@ def home():
     )
 
 
-# -------------------------
-# Preview
-# -------------------------
+# =========================================================
+# PREVIEW
+# =========================================================
 
 @app.route(
     "/preview",
@@ -195,9 +230,12 @@ def preview():
     if not url:
 
         return jsonify({
+
             "success": False,
+
             "error":
                 "Paste a video link first."
+
         }), 400
 
     try:
@@ -231,9 +269,9 @@ def preview():
         }), 400
 
 
-# -------------------------
-# Detect platform
-# -------------------------
+# =========================================================
+# DETECT
+# =========================================================
 
 @app.route(
     "/detect",
@@ -286,9 +324,9 @@ def detect():
     })
 
 
-# -------------------------
-# Download
-# -------------------------
+# =========================================================
+# DOWNLOAD
+# =========================================================
 
 @app.route(
     "/download",
@@ -357,13 +395,9 @@ def download():
         f"{file_id}.%(ext)s"
     )
 
-    ydl_opts = {
+    ydl_opts = get_ydl_options()
 
-        "quiet": True,
-
-        "no_warnings": True,
-
-        "noplaylist": True,
+    ydl_opts.update({
 
         "outtmpl":
             output_template,
@@ -378,7 +412,7 @@ def download():
                 f"best[height<={quality}]"
                 f"/best"
             )
-    }
+    })
 
     try:
 
@@ -420,7 +454,6 @@ def download():
                     break
 
             # Check merged file
-
             if not filename:
 
                 prepared = (
@@ -496,9 +529,9 @@ def download():
         }), 500
 
 
-# -------------------------
-# Serve downloaded file
-# -------------------------
+# =========================================================
+# SERVE DOWNLOADED FILE
+# =========================================================
 
 @app.route(
     "/file/<path:filename>"
@@ -516,34 +549,31 @@ def serve_file(filename):
     )
 
 
-# -------------------------
-# Start DestiGrab
-# -------------------------
+# =========================================================
+# START DESTIGRAB
+# =========================================================
 
 if __name__ == "__main__":
 
     print("")
-
     print(
         "==================================="
     )
-
     print(
-        "     🚀 DESTIGRAB UNIVERSAL"
+        "       🚀 DESTIGRAB UNIVERSAL"
     )
-
     print(
         "==================================="
     )
-
     print(
         "Multi-platform downloader engine"
     )
-
+    print(
+        "YouTube client fallback enabled"
+    )
     print(
         "Local: http://127.0.0.1:5000"
     )
-
     print("")
 
     app.run(
@@ -554,4 +584,3 @@ if __name__ == "__main__":
 
         debug=True
     )
-
