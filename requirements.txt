@@ -1,4 +1,3 @@
 Flask
 yt-dlp[default]
-yt-dlp-get-pot-wpc
 gunicorn
