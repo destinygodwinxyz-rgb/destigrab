@@ -61,7 +61,8 @@ def detect_platform(url):
 
         return extractor
 
-    except Exception:
+    except Exception as e:
+        print("DETECT ERROR:", repr(e))
         return None
 
 
@@ -217,7 +218,7 @@ def preview():
 
         print(
             "PREVIEW ERROR:",
-            e
+            repr(e)
         )
 
         return jsonify({
@@ -225,9 +226,7 @@ def preview():
             "success": False,
 
             "error":
-                "DestiGrab couldn't read this link. "
-                "Make sure the video is public and "
-                "the URL is correct."
+                str(e)
 
         }), 400
 
@@ -484,7 +483,7 @@ def download():
 
         print(
             "DOWNLOAD ERROR:",
-            e
+            repr(e)
         )
 
         return jsonify({
@@ -492,9 +491,7 @@ def download():
             "success": False,
 
             "error":
-                "Download failed. The video "
-                "may be private, unavailable, "
-                "restricted, or unsupported."
+                str(e)
 
         }), 500
 
@@ -556,5 +553,5 @@ if __name__ == "__main__":
         port=5000,
 
         debug=True
-
     )
+
